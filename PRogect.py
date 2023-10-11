@@ -29,3 +29,6 @@ for train_index, test_index in split.split(df, df["Cordinates"]):
 strat_train_set = strat_train_set.drop(columns=["Cordinates"], axis = 1)
 strat_test_set = strat_test_set.drop(columns=["Cordinates"], axis = 1)
 
+plt.figure()
+corr_matrix = df.corr()
+sns.heatmap(np.abs(corr_matrix))
