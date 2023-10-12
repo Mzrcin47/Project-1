@@ -73,11 +73,10 @@ sns.heatmap(np.abs(corr_matrix))
 #Step 4 Classification Model 
 
 from sklearn.ensemble import RandomForestClassifier
-model1 = RandomForestClassifier(n_estimators=10, random_state=4747)
+model1 = RandomForestClassifier(n_estimators=20, random_state=4747)
 model1.fit(train_X, train_y)
 model1_predictions = model1.predict(train_X)
 model1_train_mae = mean_absolute_error(model1_predictions, train_y)
-print("Model 1 training MAE is: ", round(model1_train_mae,2))
 
 #2nd Classification Model 
 from sklearn.tree import DecisionTreeClassifier
@@ -89,3 +88,17 @@ model3.fit(train_X, train_y)
 some_data = train_X.iloc[:10]  
 predicted_values = model3.predict(some_data) 
 some_step_values = predicted_values
+
+#Step 5 Model Performance Analysis
+#Random Forest Classifier
+from sklearn.metrics import f1_score
+f1 = f1_score(train_y, model1_predictions, average='macro')
+print("Model 1 training macro-average F1 score is: ", round(f1, 2))
+# print("Model 1 training F1 score is: ", round(f1, 2))
+
+
+
+
+
+
+
