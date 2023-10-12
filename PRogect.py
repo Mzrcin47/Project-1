@@ -4,8 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
-#import seaborn as sns
-#from sklearn.model_selection import StratifiedShuffleSplit
+from sklearn.metrics import mean_absolute_error
 
 #step1 data processing
 #One must identify which variable we need to predict, and as indicated 
@@ -15,12 +14,7 @@ df = df.dropna()
 df = df.reset_index(drop=True) 
 print(df)
 
-#Step2 Visualization
-df.hist(bins=50,figsize=(20,15))
-
-#Step 3_However will split dataset first 
-
-
+#Splitting the data set
 df["Cordinates"] = pd.cut(df["Step"],bins=[0., 1.5, 3.0, 4.5, 6., np.inf],labels=[1, 2, 3, 4, 5])
 split = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=4747)
 for train_index, test_index in split.split(df, df["Cordinates"]):
@@ -29,6 +23,68 @@ for train_index, test_index in split.split(df, df["Cordinates"]):
 strat_train_set = strat_train_set.drop(columns=["Cordinates"], axis = 1)
 strat_test_set = strat_test_set.drop(columns=["Cordinates"], axis = 1)
 
+train_y = strat_train_set['Step']
+df_X = strat_train_set.drop(columns = ["Step"])
+
+my_scaler = StandardScaler()
+my_scaler.fit(df_X.iloc[:, 0:-2].values)
+scaled_data = my_scaler.transform(df_X.iloc[:,0:-2])
+scaled_data_df = pd.DataFrame(scaled_data, columns=df_X.columns[0:-2])
+train_X = scaled_data_df.join(df_X.iloc[:,-2:])
+
+#Step 2 Visualization
+x_data = df["X"]
+y_data = df["Y"]
+z_data = df["Z"]
+step_data = df["Step"]
+
+
+plt.figure(figsize=(15, 5)) 
+
+
+plt.subplot(131) 
+plt.scatter(x_data, step_data)
+plt.xlabel("X")
+plt.ylabel("Step")
+plt.title("X vs Step")
+
+
+plt.subplot(132) 
+plt.scatter(y_data, step_data)
+plt.xlabel("Y")
+plt.ylabel("Step")
+plt.title("Y vs Step")
+
+plt.subplot(133)
+plt.scatter(z_data, step_data)
+plt.xlabel("Z")
+plt.ylabel("Step")
+plt.title("Z vs Step")
+
+plt.tight_layout()
+plt.show()
+
+strat_train_set.hist(bins=50,figsize=(20,15))
+
+
+#Step 3
+
 plt.figure()
 corr_matrix = df.corr()
 sns.heatmap(np.abs(corr_matrix))
+
+#Step 4 Classification Model 
+
+from sklearn.ensemble import RandomForestClassifier
+model1 = RandomForestClassifier(n_estimators=10, random_state=4747)
+model1.fit(train_X, train_y)
+model1_predictions = model1.predict(train_X)
+model1_train_mae = mean_absolute_error(model1_predictions, train_y)
+print("Model 1 training MAE is: ", round(model1_train_mae,2))
+
+#2nd Classification Problem
+
+
+
+
+
