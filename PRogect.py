@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import StratifiedShuffleSplit
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.preprocessing import  StandardScaler
 from sklearn.metrics import mean_absolute_error
 
 #step1 data processing
@@ -38,16 +38,13 @@ y_data = df["Y"]
 z_data = df["Z"]
 step_data = df["Step"]
 
-
 plt.figure(figsize=(15, 5)) 
-
 
 plt.subplot(131) 
 plt.scatter(x_data, step_data)
 plt.xlabel("X")
 plt.ylabel("Step")
 plt.title("X vs Step")
-
 
 plt.subplot(132) 
 plt.scatter(y_data, step_data)
@@ -82,9 +79,13 @@ model1_predictions = model1.predict(train_X)
 model1_train_mae = mean_absolute_error(model1_predictions, train_y)
 print("Model 1 training MAE is: ", round(model1_train_mae,2))
 
-#2nd Classification Problem
+#2nd Classification Model 
+from sklearn.tree import DecisionTreeClassifier
 
-
-
-
-
+#3rd Classification Model
+from sklearn.linear_model import LinearRegression
+model3 = LinearRegression()
+model3.fit(train_X, train_y)
+some_data = train_X.iloc[:10]  
+predicted_values = model3.predict(some_data) 
+some_step_values = predicted_values
