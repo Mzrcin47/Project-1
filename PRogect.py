@@ -90,6 +90,12 @@ from sklearn.tree import DecisionTreeClassifier
 
 
 #3rd Classification Model
+from sklearn.linear_model import LinearRegression
+model3 = LinearRegression()
+model3.fit(train_X, train_y)
+some_data = train_X.iloc[:10]
+some_data.columns = train_X.columns
+some_house_values = train_y.iloc[:10]
 
 
 #Step 5 Model Performance Analysis
@@ -107,7 +113,7 @@ plt.xlabel("Predicted")
 plt.ylabel("Actual")
 plt.title("Confusion Matrix")
 plt.show()
-
+#TEst data
 test_predictions = model1.predict(df_test_X)
 cm_test = confusion_matrix(test_y, test_predictions)
 plt.figure(figsize=(8, 5))
@@ -119,6 +125,7 @@ plt.show()
 
 # f1_1 = f1_score(test_y, model1_predictions, average='macro')
 # print("Model 1 test macro-average F1 score is: ", round(f1_1, 2))
+
 #Confusion Matrix For Linear Regression
 
 
