@@ -8,6 +8,7 @@ from sklearn.metrics import mean_absolute_error
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import GridSearchCV
+import joblib 
 
 #step1 data processing
 #One must identify which variable we need to predict, and as indicated 
@@ -130,7 +131,7 @@ model2_predictions = model2.predict(train_X)
 from sklearn.naive_bayes import GaussianNB 
 model3 = GaussianNB()
 model3.fit(train_X, train_y)
-test_predictions = model3.predict(df_test_X)
+model3_predictions = model3.predict(train_X)
 
 
 #Step 5 Model Performance Analysis
@@ -169,6 +170,28 @@ plt.xlabel("Predicted")
 plt.ylabel("Actual")
 plt.title("Confusion Matrix for Decision Tree on Train Data")
 plt.show()
+
+#Confusion Matrix For GuassianNB
+cm_decision_tree = confusion_matrix(train_y, model3_predictions)
+plt.figure(figsize=(8, 5))
+sns.heatmap(cm_decision_tree, annot=True, fmt="d", cmap="Reds")
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
+plt.title("Confusion Matrix for GuassianNB on Train Data")
+plt.show()
+
+#Step 6 Model Evaluation
+loaded = joblib.load('model1.pkl')
+cordinates2 = pd.DataFrame({
+    'X': [9.375, 6.995, 0, 9.4, 9.4],
+    'Y': [3.0625, 5.125, 3.0625, 3, 3],
+    'Z': [1.51, 0.3875, 1.93, 1.8, 1.3]
+})
+predicted_model = loaded.predict(cordinates2)
+print("The predicted maintenance steps for the given coordinates are the following:\n", predicted_model)
+
+
+
 
 
 
