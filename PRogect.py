@@ -74,16 +74,18 @@ plt.show()
 strat_train_set.hist(bins=50,figsize=(20,15))
 
 
-#Step 3 Correlation MAtrix
+#Step 3 Correlation 
+
 plt.figure()
 corr_matrix = df.corr()
-sns.heatmap(np.abs(corr_matrix))
-corr1 = np.corrcoef(train_X['X'], train_y)
-print("X correlation wiht y is: ", corr1[0,1])
-corr2 = np.corrcoef(train_X['Y'], train_y)
-print("Y correlation wiht y is: ",corr2[0,1])
-corr3 = np.corrcoef(train_X['Z'], train_y)
-print("total Z correlation wiht y is: ",corr3[0,1])
+# sns.heatmap(np.abs(corr_matrix))
+sns.heatmap(np.abs(corr_matrix), annot=True, fmt="f", cmap="BuPu")
+# corr1 = np.corrcoef(train_X['X'], train_y)
+# print("X correlation wiht y is: ", corr1[0,1])
+# corr2 = np.corrcoef(train_X['Y'], train_y)
+# print("Y correlation wiht y is: ",corr2[0,1])
+# corr3 = np.corrcoef(train_X['Z'], train_y)
+# print("total Z correlation wiht y is: ",corr3[0,1])
 
 
 #Step 4 Classification Model 
@@ -95,18 +97,18 @@ model1_train_mae = mean_absolute_error(model1_predictions, train_y)
 
 #2nd Classification Model Decision Trees
 from sklearn.tree import DecisionTreeClassifier
-model2 = DecisionTreeClassifier()
+model2 = DecisionTreeClassifier(random_state=47)
 model2.fit(train_X, train_y)
 model2_predictions = model2.predict(train_X)
 
 
 #3rd Classification Model
-from sklearn.linear_model import LinearRegression
-model3 = LinearRegression()
-model3.fit(train_X, train_y)
-some_data = train_X.iloc[:10]
-some_data.columns = train_X.columns
-some_house_values = train_y.iloc[:10]
+# from sklearn.linear_model import LinearRegression
+# model3 = LinearRegression()
+# model3.fit(train_X, train_y)
+# some_data = train_X.iloc[:10]
+# some_data.columns = train_X.columns
+# some_house_values = train_y.iloc[:10]
 
 
 #Step 5 Model Performance Analysis
@@ -121,17 +123,18 @@ plt.figure(figsize=(8, 5))
 sns.heatmap(cm, annot=True, fmt="d", cmap="Blues")
 plt.xlabel("Predicted")
 plt.ylabel("Actual")
-plt.title("Confusion Matrix")
+plt.title("Confusion Matrix for RandForestClassifier")
 plt.show()
+
 #TEst data
-test_predictions = model1.predict(df_test_X)
-cm_test = confusion_matrix(test_y, test_predictions)
-plt.figure(figsize=(8, 5))
-sns.heatmap(cm_test, annot=True, fmt="d", cmap="Blues")
-plt.xlabel("Predicted")
-plt.ylabel("Actual")
-plt.title("Confusion Matrix for Test Data")
-plt.show()
+# test_predictions = model1.predict(df_test_X)
+# cm_test = confusion_matrix(test_y, test_predictions)
+# plt.figure(figsize=(8, 5))
+# sns.heatmap(cm_test, annot=True, fmt="d", cmap="Blues")
+# plt.xlabel("Predicted")
+# plt.ylabel("Actual")
+# plt.title("Confusion Matrix for Test Data")
+# plt.show()
 
 # f1_1 = f1_score(test_y, model1_predictions, average='macro')
 # print("Model 1 test macro-average F1 score is: ", round(f1_1, 2))
@@ -139,7 +142,7 @@ plt.show()
 #Confusion Matrix For Decision Tree
 cm_decision_tree = confusion_matrix(train_y, model2_predictions)
 plt.figure(figsize=(8, 5))
-sns.heatmap(cm_decision_tree, annot=True, fmt="d", cmap="plasma")
+sns.heatmap(cm_decision_tree, annot=True, fmt="d", cmap="BuPu")
 plt.xlabel("Predicted")
 plt.ylabel("Actual")
 plt.title("Confusion Matrix for Decision Tree on Train Data")
