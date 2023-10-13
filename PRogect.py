@@ -6,6 +6,8 @@ from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.preprocessing import  StandardScaler
 from sklearn.metrics import mean_absolute_error
 from sklearn.metrics import confusion_matrix
+from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import GridSearchCV
 
 #step1 data processing
 #One must identify which variable we need to predict, and as indicated 
@@ -77,7 +79,7 @@ strat_train_set.hist(bins=50,figsize=(20,15))
 #Step 3 Correlation 
 
 plt.figure()
-corr_matrix = df.corr()
+corr_matrix = df.corr(numeric_only=True)
 # sns.heatmap(np.abs(corr_matrix))
 sns.heatmap(np.abs(corr_matrix), annot=True, fmt="f", cmap="BuPu")
 # corr1 = np.corrcoef(train_X['X'], train_y)
@@ -90,25 +92,45 @@ sns.heatmap(np.abs(corr_matrix), annot=True, fmt="f", cmap="BuPu")
 
 #Step 4 Classification Model 
 from sklearn.ensemble import RandomForestClassifier
-model1 = RandomForestClassifier(n_estimators=5, random_state=4747)
+model1 = RandomForestClassifier(n_estimators=2,max_features=4, random_state=4747)
 model1.fit(train_X, train_y)
 model1_predictions = model1.predict(train_X)
 model1_train_mae = mean_absolute_error(model1_predictions, train_y)
 
+#cross validation and parameters
+param_grid = {
+    'n_estimators': [1,2,3,4,5,7,10,15, 20, 30],
+    'max_features': [2, 4,8]
+}
+
+grid_search = GridSearchCV(model1, param_grid, cv=10, scoring="accuracy", n_jobs=-1)
+grid_search.fit(train_X, train_y)
+best_params = grid_search.best_params_
+print("Best Hyperparameters:", best_params)
+best_model1 = grid_search.best_estimator_
+
+
+
 #2nd Classification Model Decision Trees
 from sklearn.tree import DecisionTreeClassifier
-model2 = DecisionTreeClassifier(random_state=47)
+model2 = DecisionTreeClassifier(min_samples_leaf=1,random_state=47)
 model2.fit(train_X, train_y)
 model2_predictions = model2.predict(train_X)
 
+# param_grid2= { 'min_sample_leaf': [1,2,3,4,5,7,10,15, 20, 30],}
 
-#3rd Classification Model
-# from sklearn.linear_model import LinearRegression
-# model3 = LinearRegression()
-# model3.fit(train_X, train_y)
-# some_data = train_X.iloc[:10]
-# some_data.columns = train_X.columns
-# some_house_values = train_y.iloc[:10]
+# grid_search2 = GridSearchCV(model1, param_grid2, cv=10, scoring="accuracy", n_jobs=-1)
+# grid_search2 = grid_search.best_params_
+# best_params2 = grid_search.best_params_
+# print("Best Hyperparameters for decision tree:", best_params2)
+# best_model2 = grid_search.best_estimator_
+
+
+#3rd Classification Model GuassianNB
+from sklearn.naive_bayes import GaussianNB 
+model3 = GaussianNB()
+model3.fit(train_X, train_y)
+test_predictions = model3.predict(df_test_X)
 
 
 #Step 5 Model Performance Analysis
