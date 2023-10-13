@@ -78,6 +78,13 @@ strat_train_set.hist(bins=50,figsize=(20,15))
 plt.figure()
 corr_matrix = df.corr()
 sns.heatmap(np.abs(corr_matrix))
+corr1 = np.corrcoef(train_X['X'], train_y)
+print("X correlation wiht y is: ", corr1[0,1])
+corr2 = np.corrcoef(train_X['Y'], train_y)
+print("Y correlation wiht y is: ",corr2[0,1])
+corr3 = np.corrcoef(train_X['Z'], train_y)
+print("total Z correlation wiht y is: ",corr3[0,1])
+
 
 #Step 4 Classification Model 
 from sklearn.ensemble import RandomForestClassifier
