@@ -5,6 +5,7 @@ import seaborn as sns
 from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.preprocessing import  StandardScaler
 from sklearn.metrics import mean_absolute_error
+from sklearn.metrics import confusion_matrix
 
 #step1 data processing
 #One must identify which variable we need to predict, and as indicated 
@@ -85,8 +86,11 @@ model1.fit(train_X, train_y)
 model1_predictions = model1.predict(train_X)
 model1_train_mae = mean_absolute_error(model1_predictions, train_y)
 
-#2nd Classification Model 
+#2nd Classification Model Decision Trees
 from sklearn.tree import DecisionTreeClassifier
+model2 = DecisionTreeClassifier()
+model2.fit(train_X, train_y)
+model2_predictions = model2.predict(train_X)
 
 
 #3rd Classification Model
@@ -102,10 +106,9 @@ some_house_values = train_y.iloc[:10]
 #Random Forest Classifier
 from sklearn.metrics import f1_score
 f1 = f1_score(train_y, model1_predictions, average='macro')
-print("Model 1 training macro-average F1 score is: ", round(f1, 2))
+print("Model 1 F1 score is: ", round(f1, 2))
 
 #Confusion Matrix For Random Forest
-from sklearn.metrics import confusion_matrix
 cm = confusion_matrix(train_y, model1_predictions)
 plt.figure(figsize=(8, 5))
 sns.heatmap(cm, annot=True, fmt="d", cmap="Blues")
@@ -126,7 +129,15 @@ plt.show()
 # f1_1 = f1_score(test_y, model1_predictions, average='macro')
 # print("Model 1 test macro-average F1 score is: ", round(f1_1, 2))
 
-#Confusion Matrix For Linear Regression
+#Confusion Matrix For Decision Tree
+cm_decision_tree = confusion_matrix(train_y, model2_predictions)
+plt.figure(figsize=(8, 5))
+sns.heatmap(cm_decision_tree, annot=True, fmt="d", cmap="plasma")
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
+plt.title("Confusion Matrix for Decision Tree on Train Data")
+plt.show()
+
 
 
 
