@@ -9,6 +9,7 @@ from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import GridSearchCV
 import joblib 
+from sklearn.metrics import f1_score
 
 #step1 data processing
 #One must identify which variable we need to predict, and as indicated 
@@ -136,9 +137,14 @@ model3_predictions = model3.predict(train_X)
 
 #Step 5 Model Performance Analysis
 #Random Forest Classifier
-from sklearn.metrics import f1_score
 f1 = f1_score(train_y, model1_predictions, average='macro')
 print("Model 1 F1 score is: ", round(f1, 2))
+
+f1_2 = f1_score(train_y, model2_predictions, average='macro')
+print("Model 2 F1 score is: ", round(f1_2, 2))
+
+f1_3 = f1_score(train_y, model3_predictions, average='macro')
+print("Model 3 F1 score is: ", round(f1_3, 2))
 
 #Confusion Matrix For Random Forest
 cm = confusion_matrix(train_y, model1_predictions)
