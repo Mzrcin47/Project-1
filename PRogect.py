@@ -140,11 +140,22 @@ model3_predictions = model3.predict(train_X)
 f1 = f1_score(train_y, model1_predictions, average='macro')
 print("Model 1 F1 score is: ", round(f1, 2))
 
+scores_model1 = cross_val_score(model1, train_X, train_y, cv=5, scoring='accuracy')
+print("Cross-Validation Accuracy of model1:", scores_model1.mean())
+
+#Decision Tree
 f1_2 = f1_score(train_y, model2_predictions, average='macro')
 print("Model 2 F1 score is: ", round(f1_2, 2))
 
+scores_model2 = cross_val_score(model2, train_X, train_y, cv=5, scoring='accuracy')
+print("Cross-Validation Accuracy of model2:", scores_model2.mean())
+
+#GuassianNB
 f1_3 = f1_score(train_y, model3_predictions, average='macro')
 print("Model 3 F1 score is: ", round(f1_3, 2))
+
+scores_model3 = cross_val_score(model3, train_X, train_y, cv=5, scoring='accuracy')
+print("Cross-Validation Accuracy of model3:", scores_model3.mean())
 
 #Confusion Matrix For Random Forest
 cm = confusion_matrix(train_y, model1_predictions)
