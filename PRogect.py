@@ -152,7 +152,7 @@ plt.figure(figsize=(8, 5))
 sns.heatmap(cm, annot=True, fmt="d", cmap="Blues")
 plt.xlabel("Predicted")
 plt.ylabel("Actual")
-plt.title("Confusion Matrix for RandForestClassifier")
+plt.title("Confusion Matrix for RandForestClassifier on Train Data")
 plt.show()
 
 #TEst data
