@@ -94,7 +94,7 @@ sns.heatmap(np.abs(corr_matrix), annot=True, fmt="f", cmap="BuPu")
 
 #Step 4 Classification Model 
 from sklearn.ensemble import RandomForestClassifier
-model1 = RandomForestClassifier(n_estimators=2,max_features=4, random_state=4747)
+model1 = RandomForestClassifier(n_estimators=2,max_features=4, min_samples_split=2, random_state=4747)
 model1.fit(train_X, train_y)
 model1_predictions = model1.predict(train_X)
 model1_train_mae = mean_absolute_error(model1_predictions, train_y)
@@ -102,7 +102,8 @@ model1_train_mae = mean_absolute_error(model1_predictions, train_y)
 #cross validation and parameters
 param_grid = {
     'n_estimators': [1,2,3,4,5,7,10,15, 20, 30],
-    'max_features': [2, 4,8]
+    'max_features': [2, 4,8],
+    'min_samples_split': [2, 5, 10],
 }
 
 grid_search = GridSearchCV(model1, param_grid, cv=10, scoring="accuracy", n_jobs=-1)
@@ -200,11 +201,7 @@ plt.show()
 #Step 6 Model Evaluation
 
 joblib.dump(model1,'model1.pkl')
-cordinates2 = pd.DataFrame({
-    'X': [9.375, 6.995, 0, 9.4, 9.4],
-    'Y': [3.0625, 5.125, 3.0625, 3, 3],
-    'Z': [1.51, 0.3875, 1.93, 1.8, 1.3]
-})
+cordinates2 = pd.DataFrame(np.array([[9.375, 3.0625, 1.51], [6.995, 5.125, 0.3875], [0, 3.0625, 1.93], [9.4, 3, 1.8], [9.4, 3, 1.3]]), columns=['X', 'Y', 'Z'])
 loaded = joblib.load('model1.pkl')
 predicted_model = loaded.predict(cordinates2)
 print("The predicted maintenance steps for the given coordinates are the following:\n", predicted_model)
