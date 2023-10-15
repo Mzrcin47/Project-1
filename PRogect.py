@@ -198,12 +198,14 @@ plt.title("Confusion Matrix for GuassianNB on Train Data")
 plt.show()
 
 #Step 6 Model Evaluation
-loaded = joblib.load('model1.pkl')
+
+joblib.dump(model1,'model1.pkl')
 cordinates2 = pd.DataFrame({
     'X': [9.375, 6.995, 0, 9.4, 9.4],
     'Y': [3.0625, 5.125, 3.0625, 3, 3],
     'Z': [1.51, 0.3875, 1.93, 1.8, 1.3]
 })
+loaded = joblib.load('model1.pkl')
 predicted_model = loaded.predict(cordinates2)
 print("The predicted maintenance steps for the given coordinates are the following:\n", predicted_model)
 
