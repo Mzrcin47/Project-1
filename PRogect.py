@@ -102,8 +102,8 @@ model1_train_mae = mean_absolute_error(model1_predictions, train_y)
 #cross validation and parameters
 param_grid = {
     'n_estimators': [1,2,3,4,5,7,10,15, 20, 30],
-    'max_features': [2, 4,8],
-    'min_samples_split': [2, 5, 10],
+    'max_features': [2, 4,8,10,20],
+    'min_samples_split': [2, 5, 10,15,20],
 }
 
 grid_search = GridSearchCV(model1, param_grid, cv=10, scoring="accuracy", n_jobs=-1)
@@ -116,17 +116,17 @@ best_model1 = grid_search.best_estimator_
 
 #2nd Classification Model Decision Trees
 from sklearn.tree import DecisionTreeClassifier
-model2 = DecisionTreeClassifier(min_samples_leaf=1,random_state=47)
+model2 = DecisionTreeClassifier(min_samples_leaf=2,random_state=47)
 model2.fit(train_X, train_y)
 model2_predictions = model2.predict(train_X)
 
-# param_grid2= { 'min_sample_leaf': [1,2,3,4,5,7,10,15, 20, 30],}
+param_grid2= { 'min_sample_leaf': [1,2,3,4,5,7,10,15, 20, 30],}
 
-# grid_search2 = GridSearchCV(model1, param_grid2, cv=10, scoring="accuracy", n_jobs=-1)
-# grid_search2 = grid_search.best_params_
-# best_params2 = grid_search.best_params_
-# print("Best Hyperparameters for decision tree:", best_params2)
-# best_model2 = grid_search.best_estimator_
+grid_search2 = GridSearchCV(model1, param_grid2, cv=10, scoring="accuracy", n_jobs=-1)
+grid_search2 = grid_search.best_params_
+best_params2 = grid_search.best_params_
+print("Best Hyperparameters for decision tree:", best_params2)
+best_model2 = grid_search.best_estimator_
 
 
 #3rd Classification Model GuassianNB
@@ -168,14 +168,14 @@ plt.title("Confusion Matrix for RandForestClassifier on Train Data")
 plt.show()
 
 #TEst data
-# test_predictions = model1.predict(df_test_X)
-# cm_test = confusion_matrix(test_y, test_predictions)
-# plt.figure(figsize=(8, 5))
-# sns.heatmap(cm_test, annot=True, fmt="d", cmap="Blues")
-# plt.xlabel("Predicted")
-# plt.ylabel("Actual")
-# plt.title("Confusion Matrix for Test Data")
-# plt.show()
+test_predictions = model1.predict(df_test_X)
+cm_test = confusion_matrix(test_y, test_predictions)
+plt.figure(figsize=(8, 5))
+sns.heatmap(cm_test, annot=True, fmt="d", cmap="Blues")
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
+plt.title("Confusion Matrix for Test Data")
+plt.show()
 
 # f1_1 = f1_score(test_y, model1_predictions, average='macro')
 # print("Model 1 test macro-average F1 score is: ", round(f1_1, 2))
@@ -201,7 +201,7 @@ plt.show()
 #Step 6 Model Evaluation
 
 joblib.dump(model1,'model1.pkl')
-cordinates2 = pd.DataFrame(np.array([[9.375, 3.0625, 1.51], [6.995, 5.125, 0.3875], [0, 3.0625, 1.93], [9.4, 3, 1.8], [9.4, 3, 1.3]]), columns=['X', 'Y', 'Z'])
+cordinates2 = pd.DataFrame(np.array([[9.375, 3.0625, 1.51], [6.995, 5.125, 0.3875], [0.000, 3.0625, 1.93], [9.4, 3, 1.8], [9.4, 3, 1.3]]), columns=['X', 'Y', 'Z'])
 loaded = joblib.load('model1.pkl')
 predicted_model = loaded.predict(cordinates2)
 print("The predicted maintenance steps for the given coordinates are the following:\n", predicted_model)
